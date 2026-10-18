@@ -1,0 +1,23 @@
+conda activate yolo_cam
+python webcam.py
+
+python app_pyqt.py
+
+
+
+
+
+--------
+
+yolo11s-oiv7.pt – Rileva 600+ oggetti diversi, generale, man, woman
+
+yolov5x6u.pt – Alta precisione, lento, oggetti dettagliati.
+
+yolov8n.pt – Molto veloce, precisione bassa, webcam.
+
+yolov8s-pose.pt – Rilevamento pose corpo umano, movimenti.
+
+yolov8s-seg.pt – Segmentazione oggetti precisa, forma reale.
+
+yolov8x.pt – Massima precisione, scene complesse, lento.
+

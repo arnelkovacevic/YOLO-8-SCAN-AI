@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+venv/
+.env
+.env.*
+*.env
+
+# Model weights and large binaries
+*.pt
+*.pth
+*.onnx
+models/
+runs/
+best.pt
+helmet.pt
+
+# Data and datasets
+data/
+datasets/
+*.zip
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+.venv/
