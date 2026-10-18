@@ -1,33 +1,30 @@
 # Python
 __pycache__/
 *.py[cod]
-*.so
 *.egg-info/
-dist/
-build/
+
+# Virtual environments
+.venv/
 venv/
+env/
+
+# Build output
+build/
+dist/
+*.spec
+
+# App output (screenshots, recordings)
+output/
+
+# Secrets
 .env
 .env.*
-*.env
 
-# Model weights and large binaries
-*.pt
-*.pth
-*.onnx
-models/
-runs/
-best.pt
-helmet.pt
+# Large model weights (GitHub limit: 100 MB) – fetch with scripts/download_models.py
+models/yolov5x6u.pt
+models/yolov8x.pt
 
-# Data and datasets
-data/
-datasets/
-*.zip
-
-# IDEs and editors
+# IDEs / OS
 .vscode/
 .idea/
-
-# macOS
 .DS_Store
-.venv/

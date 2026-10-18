@@ -1,145 +1,132 @@
-# YOLOv8 Object Detection with OpenCV and Ultralytics
+# SCAN AI | Orizon-AIx
 
-This Python script uses YOLOv8 from Ultralytics for real-time object detection using OpenCV. The script initializes a camera, loads the YOLOv8 model, and processes frames from the camera, annotating detected objects with bounding boxes.
+**Real-time object detection desktop app built with PyQt5 and YOLOv8.**
 
-## Prerequisites
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
+![PyQt5](https://img.shields.io/badge/GUI-PyQt5-41CD52?logo=qt&logoColor=white)
+![YOLOv8](https://img.shields.io/badge/YOLO-Ultralytics%20v8-111F68)
+![License](https://img.shields.io/badge/License-AGPL--3.0-blue)
 
-Make sure you have the following libraries installed:
+## **Overview**
 
-- `cv2` (OpenCV)
-# YOLO-8-SCAN_AI
+SCAN AI is a desktop application that runs YOLO models on a live webcam, an IP camera / RTSP stream, a video file or a still image. Detections are drawn on the video in real time and summarised in a side panel. The interface is available in **Italian and English** and has a dark and a light theme.
 
-Short description
------------------
-YOLO-8-SCAN_AI is a small toolkit that uses Ultralytics YOLO models for real-time object detection. The repository contains several example scripts (webcam inference, GUI using PyQt), ROS node examples, and model weights (stored locally).
+## **Features**
 
-What this project provides
--------------------------
-- Real-time webcam inference examples (`webcam.py`, `scripts/run_webcam.py`).
-- A PyQt5 GUI for live detection (`app_pyqt.py`, runnable with `scripts/run_gui.py`).
-- Utility helpers under `src/yolo_scan` to centralize model loading and per-frame inference.
-- Example ROS1/ROS2 node files (`ROS1_node.py`, `ROS2_node.py`) — these are example stubs and may require adjustment for your ROS topics.
+- Live detection from a local webcam, an IP camera / RTSP / HTTP URL, or a video file path
+- Image analysis: pick an image from `assets/sample/` or browse to any image on disk
+- Model selector: every `.pt` file in `models/` is listed automatically
+- Adjustable confidence threshold (live, no restart needed)
+- Live FPS counter, object counter and per-class detection summary
+- Screenshot of the annotated frame and video recording (`.avi`), saved to `output/`
+- Inference runs in a separate thread, so the UI stays responsive
+- IT / EN interface switch, dark / light theme, "About" dialog
 
-Models included (short summary)
-------------------------------
-The repository contains several `.pt` files (model weights). See `models/` for your local copies. A brief summary (from `setting_run.txt`):
+## **Screenshots**
 
-- `yolo11s-oiv7.pt` — general model, ~600 classes
-- `yolov5x6u.pt` — high accuracy, slower
-- `yolov8n.pt` — very fast, lower accuracy (good for webcams)
-- `yolov8s-pose.pt` — human pose detection
-- `yolov8s-seg.pt` — segmentation models
-- `yolov8x.pt` — highest accuracy, slower
+![Main window](docs/screenshots/demo.jpg)
 
-Important: model weight files are large and are included locally for convenience. They are listed in `.gitignore` so they are not committed to remote repos by default.
+<!-- TODO: add docs/screenshots/main-dark.png, main-light.png, info-dialog.png -->
 
-Dependencies
-------------
-Minimum dependencies (see `requirements.txt`):
+## **Supported Models**
 
-- Python 3.8+
-- ultralytics
-- opencv-python
-- supervision==0.3.0
-- pyqt5
-- pyinstaller (for packaging)
+Any Ultralytics-compatible `.pt` model placed in `models/` works. Included / supported:
 
-Install using pip (recommended inside a virtualenv or conda env):
+| Model | Task | Speed vs accuracy |
+|---|---|---|
+| `yolov8n.pt` | Detection | Fastest, lowest accuracy – good for webcams |
+| `yolo11s-oiv7.pt` | Detection | Balanced, 600+ Open Images V7 classes |
+| `yolov8s-seg.pt` | Segmentation | Medium speed, precise object shapes |
+| `yolov8s-pose.pt` | Pose | Medium speed, human body keypoints |
+| `yolov5x6u.pt` | Detection | Slow, high accuracy, detailed objects |
+| `yolov8x.pt` | Detection | Slowest, highest accuracy, complex scenes |
+| `best.pt`, `helmet.pt` | Custom | Custom-trained models (TODO: document classes and dataset) |
+
+`yolov8x.pt` and `yolov5x6u.pt` are larger than GitHub's 100 MB file limit and are **not stored in the repository**. Download them with:
 
 ```bash
-python -m pip install -r requirements.txt
+python scripts/download_models.py
 ```
 
-Quick start (webcam)
---------------------
-Run the provided webcam wrapper which uses the project's helpers:
+## **Installation**
 
 ```bash
-python scripts/run_webcam.py --model models/yolov8n.pt --source 0
+git clone https://github.com/<your-username>/scan-ai.git
+cd scan-ai
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python scripts/download_models.py   # optional: large models
 ```
 
-Replace `--source 0` with a video file path or RTSP URL for network cameras.
+Tested with Python 3.10 (macOS).
 
-Run the GUI (PyQt)
-------------------
-Start the GUI app that wraps `app_pyqt.py`:
+## **Usage**
 
 ```bash
-python scripts/run_gui.py
+python main.py
 ```
 
-Project layout
---------------
+`python app_pyqt.py` still works and starts the same app.
 
-- `app_pyqt.py` — PyQt GUI (main window `YOLOApp`).
-- `webcam.py`, `webcam_yolo.py`, `yolo_inference.py` — small example scripts.
-- `models/` — store `.pt` weight files here.
-- `src/yolo_scan/` — package with inference helpers (`load_model`, `run_model_on_frame`, `list_model_files`).
-- `scripts/` — small CLI wrappers (`run_webcam.py`, `run_gui.py`).
-- `requirements.txt`, `README.md`, `LICENSE`, `.gitignore` — repo metadata.
+1. **Video source** – choose a local webcam, or "Other source" and enter an RTSP/HTTP URL or the path of a video file.
+2. **YOLO model** – choose a model from the list.
+3. **Confidence threshold** – move the slider; changes apply immediately.
+4. Press **Start detection**. Use **Screenshot** and **Record video** while it runs; files are saved to `output/`.
+5. **Image analysis** – pick an image (or press **Browse**) and press **Analyze**.
+6. Switch language with the 🇮🇹 / 🇬🇧 buttons and theme with 🌙 / ☀️.
 
-Refactor notes and goals
-------------------------
-I created `src/yolo_scan` to centralize model-loading and per-frame inference. The example wrappers in `scripts/` use those helpers so logic is not duplicated between the GUI and CLI.
-
-Known limitations & TODO
-------------------------
-- The ROS node examples may need topic/message adjustments for your ROS version — they were left as example stubs.
-- `app_pyqt.py` contains the full GUI implementation; it was left in place and is launched via `scripts/run_gui.py`.
-- Consider adding a `scripts/download_models.sh` to fetch official weights instead of committing them.
-
-Security and secrets
---------------------
-I scanned the repository for common secret tokens (`API_KEY`, `.env`, `PRIVATE_KEY`) and did not find obvious matches. If you previously pushed secrets to a remote repository, rotate those credentials and remove them from history (see guidance below).
-
-Cleaning large files & sensitive data from git history
-----------------------------------------------------
-If you have large `.pt` files or secrets already present in git history, remove them with `git-filter-repo` (recommended) or BFG and then force-push:
+## **Build the .exe**
 
 ```bash
-# install git-filter-repo (pip or package manager)
-pip install git-filter-repo
-
-# example: remove all .pt files from history
-git filter-repo --invert-paths --path-glob '*.pt' --path models/
-git push --force
+pip install -r requirements-dev.txt
+python scripts/build_exe.py
 ```
 
-If secrets were committed, rotate them at the provider and remove from history before publishing.
+The executable is created in `dist/`. Place the `models/` and `assets/` folders next to it. TODO: the PyInstaller build has not been tested yet.
 
-Packaging a desktop executable (PyInstaller)
-------------------------------------------
-You can create a standalone executable using PyInstaller. Note: building a Windows `.exe` should be performed on Windows; building macOS `.app` should be done on macOS.
+## **Project Structure**
 
-Example (create a single-folder build for the GUI):
-
-```bash
-# from repo root, with virtualenv activated
-pip install pyinstaller
-
-# Build GUI (on the platform you target)
-pyinstaller --noconfirm --windowed --add-data "models:models" scripts/run_gui.py
-
-# The output will be in `dist/run_gui/` (on macOS it may create a .app bundle)
+```
+scan-ai/
+├── main.py                  # entry point
+├── app_pyqt.py              # compatibility launcher
+├── src/scan_ai/
+│   ├── ui/                  # main window, info dialog, styles/themes
+│   ├── core/                # detection worker thread, camera discovery
+│   ├── utils/               # paths and file helpers
+│   └── i18n/                # IT / EN translations
+├── models/                  # YOLO .pt weights
+├── assets/sample/           # sample images
+├── docs/screenshots/        # README screenshots
+├── scripts/                 # build_exe.py, download_models.py
+├── requirements.txt
+├── requirements-dev.txt
+└── LICENSE
 ```
 
-Example (CLI webcam to single-file exe):
+## **Use Cases**
 
-```bash
-pyinstaller --onefile --add-data "models:models" scripts/run_webcam.py
-# result: dist/run_webcam (single binary)
-```
+- **Industry and safety** – monitoring people and objects in work areas. Detecting helmets, vests or gloves requires a custom-trained model (see `helmet.pt` as an example).
+- **Sports** – player and ball detection, or body pose analysis with the pose model.
+- **Logistics** – counting and recognising packages, vehicles and pallets, ideally with a model trained on your own data.
 
-Notes on packaging:
-- `--add-data "models:models"` instructs PyInstaller to include the `models/` folder. Adjust paths as needed.
-- PyInstaller may need additional hidden-imports for `ultralytics` or `PyQt5`; if the executable fails, check the PyInstaller warnings and add `--hidden-import` flags.
-- GPU/torch support: if your models require GPU, ensure the target machine has appropriate CUDA drivers and the runtime environment; packaging does not bundle drivers.
+## **Roadmap**
 
-Support and next steps
-----------------------
-I can proceed with a full reorganization (moving `app_pyqt.py` into the `src/yolo_scan` package as `gui.py`, splitting inference logic further, and adding a `scripts/download_models.sh` and a PyInstaller spec). Tell me which of these you want me to do next:
+- [ ] Tested PyInstaller builds for Windows and macOS
+- [ ] Document the custom models (classes, dataset, metrics)
+- [ ] Model download from within the app
+- [ ] Export detection results (CSV / JSON)
+- [ ] More interface languages
 
-- Move and modularize the GUI into `src/yolo_scan.gui` (yes/no)
-- Add `scripts/download_models.sh` (yes/no)
-- Produce Windows-targeted PyInstaller spec and a CI job example (yes/no)
+## **Contributing**
 
+Issues and pull requests are welcome. Please open an issue first to discuss larger changes.
+
+## **License**
+
+Released under the **GNU AGPL-3.0** license – see [LICENSE](LICENSE). Ultralytics YOLO is also AGPL-3.0 licensed.
+
+## **Author**
+
+**Arnel Kovacevic**

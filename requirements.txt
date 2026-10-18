@@ -1,6 +1,5 @@
-ultralytics
-opencv-python
-supervision==0.3.0
-
-pyqt5
-pyinstaller
+ultralytics==8.3.233
+opencv-python==4.12.0.88
+PyQt5==5.15.9
+numpy==1.26.4
+torch==2.2.2
