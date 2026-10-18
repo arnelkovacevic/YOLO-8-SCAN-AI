@@ -24,7 +24,7 @@ SCAN AI is a desktop application that runs YOLO models on a live webcam, an IP c
 
 ## **Screenshots**
 
-![Main window](docs/screenshots/demo.jpg)
+![Main window](docs/screenshots/demo.png)
 
 <!-- TODO: add docs/screenshots/main-dark.png, main-light.png, info-dialog.png -->
 
